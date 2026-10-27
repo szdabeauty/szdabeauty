@@ -164,8 +164,9 @@ footer{display:flex;align-items:center;gap:1rem;flex-wrap:wrap;padding:2rem var(
 footer img{border-radius:50%}
 footer p{margin:0}
 footer .small{margin-left:auto}
-footer .credit{margin-left:auto;font-size:.95rem;color:var(--ink-soft)}
-footer .credit a{text-underline-offset:.3em}
+footer .legal{margin-left:auto}
+footer .legal,footer .credit{font-size:.95rem;color:var(--ink-soft)}
+footer .legal a,footer .credit a{text-underline-offset:.3em}
 
 /* lightbox */
 dialog{border:0;padding:0;background:transparent;max-width:min(94vw,56rem);max-height:94vh;overflow:visible}
@@ -188,7 +189,7 @@ dialog img{max-height:90vh;width:auto;margin:auto;border-radius:2px}
   .price{text-align:left}
   .rooms{grid-template-columns:1fr 1fr}
   .about-photos img:last-child{margin-top:1.5rem}
-  footer .small,footer .credit{margin-left:0}
+  footer .small,footer .legal{margin-left:0}
 }
 @media (max-width:30rem){
   .grid{columns:2}
@@ -199,3 +200,21 @@ dialog img{max-height:90vh;width:auto;margin:auto;border-radius:2px}
   .slats{animation:none;-webkit-mask-image:none;mask-image:none}
   .grid img,.btn,.soc{transition:none}
 }
+
+/* dev page */
+.soon{max-width:var(--max);margin:0 auto;padding:clamp(3.5rem,10vw,8rem) var(--gutter)}
+.soon h1{font-size:clamp(2.4rem,6vw,4.5rem);letter-spacing:-.03em;margin-bottom:1.5rem}
+.soon .social{margin:2rem 0}
+
+/* privacy page */
+.doc{max-width:46rem;margin:0 auto;padding:clamp(3rem,8vw,6rem) var(--gutter)}
+.doc h1{font-size:clamp(2.2rem,5vw,3.5rem);letter-spacing:-.03em;margin-bottom:.75rem}
+.doc h2{font-size:clamp(1.35rem,2.6vw,1.8rem);margin:2.5rem 0 .75rem}
+.doc h3{font-size:1.2rem;margin:1.75rem 0 .5rem}
+.doc p{max-width:none}
+.doc ul{padding-left:1.2rem;margin:0 0 1em}
+.doc li{margin-bottom:.45rem}
+.doc .meta{color:var(--ink-soft)}
+.doc dl{margin:0 0 1em}
+/* placeholder to be replaced before launch (flat colour, no gradient) */
+.todo{background:#fff3a6;color:var(--ink);padding:0 .25em}
