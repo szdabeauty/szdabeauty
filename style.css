@@ -59,7 +59,7 @@ p{margin:0 0 1em;max-width:62ch}
   mask-image:repeating-linear-gradient(90deg,#000 0,#000 calc(var(--s) - var(--gap)),transparent calc(var(--s) - var(--gap)),transparent var(--s));
   animation:open 1.6s cubic-bezier(.2,.7,.2,1) both}
 @keyframes open{from{--gap:2.2rem}99%{--gap:0px}to{--gap:0px;-webkit-mask-image:none;mask-image:none}}
-.hero-img{float:right;width:min(40%,11rem);aspect-ratio:1/1;object-fit:cover;border-radius:2px;margin:0 0 1rem 1.5rem}
+.hero-img{float:right;width:min(42%,12rem);aspect-ratio:3/4;object-fit:cover;border-radius:2px;margin:0 0 1rem 1.5rem}
 
 /* services */
 .services,.works,.about,.studio,.book,.pro,.prices{max-width:var(--max);margin:0 auto;padding:clamp(3.5rem,8vw,7rem) var(--gutter)}
@@ -79,17 +79,8 @@ p{margin:0 0 1em;max-width:62ch}
 .pro>*{max-width:var(--max);margin-left:auto;margin-right:auto;padding-left:var(--gutter);padding-right:var(--gutter)}
 .pro h2{margin-bottom:1.25rem}
 .pro .lead{color:#cdbfc4;margin-bottom:2rem}
-.acc{border-top:1px solid #4a3d44}
-.acc details,.acc-row{border-bottom:1px solid #4a3d44;margin:0;max-width:none}
-.acc summary{font:400 clamp(1.25rem,2.4vw,1.6rem)/1.3 var(--sans);padding:1rem 0;cursor:pointer;list-style:none}
-.acc summary::-webkit-details-marker{display:none}
-.acc summary::after{content:"+";float:right;font-family:var(--sans)}
-.acc details[open] summary::after{content:"\2212"}
-.acc details p{color:#cdbfc4;padding-bottom:1.25rem}
-.acc-row{font:400 clamp(1.25rem,2.4vw,1.6rem)/1.3 var(--sans);padding:1rem 0}
 
 /* services without a photo */
-.svc.plain{grid-template-columns:1fr}
 
 /* price list */
 .prices>h2{margin-bottom:1.5rem}
@@ -218,3 +209,6 @@ dialog img{max-height:90vh;width:auto;margin:auto;border-radius:2px}
 .doc dl{margin:0 0 1em}
 /* placeholder to be replaced before launch (flat colour, no gradient) */
 .todo{background:#fff3a6;color:var(--ink);padding:0 .25em}
+
+/* the dark photo block and the dark intro block read as one section */
+.studio + .pro{padding-top:0}
