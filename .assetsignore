@@ -1,0 +1,6 @@
+# Files that stay in the repository but are not published on the website.
+arak.txt
+build.mjs
+ARAK-SZERKESZTES.md
+README.md
+.assetsignore

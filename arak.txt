@@ -1,0 +1,115 @@
+# ======================================================================
+#  SZDA Beauty & Skin – ÁRLISTA
+#
+#  A weboldalon az Árlista ebből a fájlból készül. Ha itt átírsz egy
+#  számot vagy egy szöveget, és elmented (Commit changes), akkor 1-2
+#  percen belül megváltozik a weboldalon is.
+#
+#  A # jellel kezdődő sorok csak magyarázatok, ezek nem jelennek meg
+#  az oldalon.
+#
+#  HOGYAN ÉPÜL FEL?
+#    [Cím]            egy csoport címe, alatta a kezelések következnek
+#    * Név | Ár       új kezelés: a neve, egy függőleges vonal, az ára
+#                     (a vonal a magyar billentyűzeten: AltGr + W)
+#    szöveges sor     a kezelés leírása, minden sor külön bekezdés
+#    - szöveg         felsorolás pont a leírásban
+#    + szöveg         kiemelt sor (például bérletkedvezmény)
+#    > Név | Ár       alváltozat (például Arc + nyak), alatta az ahhoz
+#                     tartozó sorok, pontosan úgy jelennek meg, ahogy írod
+#    [LISTA: Cím]     két oszlopos lista, minden sor: Név | Ár
+#    [SZÖVEG: Cím]    egyszerű szöveg, az üres sor új bekezdést jelent
+#
+#  Két kezelés közé tegyél egy üres sort.
+#
+#  FONTOS: ha elrontasz valamit (például kimarad a * jel), az oldal nem
+#  frissül, és a régi árlista marad látható. Ilyenkor szólj Vincének.
+# ======================================================================
+
+[ARKANA neurokozmetikai kezelések]
+* AQ-S HACKER mikrobiom kiegyensúlyozó kezelés alga maszkkal | 24.500 Ft / 90 perc
+Aknéra hajlamos bőrre, nyugtató mélyhidratáló alga maszkkal.
+A kezelés gyakorisága kúraszerűen 4-8 alkalommal 7-14 naponként, vagy önálló kezelésként.
+
+* Neuro Cannabis Therapy | 17.000 Ft / 60 perc
+Kannabisz őssejt olajjal a bőr maximális megnyugvásáért és regenerációjáért. Diszfunkcionálisan működő bőrre is tökéletes választás.
+Kúraszerűen 6-10 alkalommal 7-14 naponként, vagy önálló kezelésként.
+
+* Peptide Pro Age Therapy | 24.000 Ft / 60 perc
+Anti-aging. Exkluzív botox-szerű lifting hatású kezelés a feszesebb kontúrokért.
+Kúraszerűen 4-8 alkalommal 14 naponként, vagy önálló kezelésként.
+
+* Neuro Gaba Therapy | 25.000 Ft / 60 perc
+Azonnali bőrfiatalító és ránctalanító neuroterápia látványos hatással.
+Kúraszerűen 5-10 alkalommal 10-14 naponként, vagy önálló kezelésként.
+
+* Woman Definition | 19.500 Ft / 60 perc
+Fitoösztrogénekkel dúsított prémium kezelés érett bőrre. A menopauza okozta bőröregedés késleltetésére illetve csökkentésére.
+Kezelés gyakorisága:
+A hormonális bőröregedés megelőzésére havi 1 kezelés (35 éves kortól).
+A hormonális bőröregedés első jeleitől 2 kezelés 14 naponta, majd havi 1 kezelés.
+A hormonális bőröregedés már előrehaladott látható jeleinél
+1. fázisban 4 kezelés 7-10 naponként
+2. fázisban 2 kezelés 7-14 naponként, majd havi 1 kezelés.
+
+* HYDRAFACIAL | 27.000 Ft / 60 perc
+Bőrmegújító mélytisztító kezelés AI alapú kamerás bőranalízissel.
+
+* Anti-aging Hydrafacial | 35.000 Ft / 90 perc
+Bipoláris rádiófrekvenciával és elektroporációval kiegészített bőrmegújító kezelés
+
+* EXKLUZÍV KEZELÉS BÉRLETEK
++ 3 alkalom -10% kezelésenként
++ 5 alkalom -15% kezelésenként
++ 8 alkalom -20% kezelésenként
+
+* Mikrodermabrázió (gyémántfejes bőrcsiszolás) kiegészítő kezelés | +5.000 Ft
+Alap kezelésekbe jól beilleszthető.
+Fakó, egyenetlen bőrfelszín, hegek, pigmentfoltok halványítása, magasabb hatóanyagfelszívódás.
+
+* KRX Thread-fill KOREAI kezelés | 25.000 Ft / 60 perc
+Felszívódó micro kollagén szálakkal feszesít.
+4 kezelés javasolt 2 hetente
+
+* Mezoterápia/dermapen kezelés
+Egyénre szabott hatóanyagokkal. Bőrmegújításra és feszesítésre szolgál.
+Segíthet:
+- finom ráncok és bőröregedés mérséklésében
+- aknés hegek és tág pórusok javításában
+- pigmentfoltok halványításában
+- egyenetlen bőrfelszín javításában
+- kollagéntermelés fokozásában
+- a bőr textúrájának és ragyogásának javításában
+A kúra során a hatás fokozatosan, több kezelés után válik látványosabbá.
+> Arc | 25.000 Ft/alkalom
+- bérletkedvezmény:
+3 alkalom 65.000 Ft
+5 alkalom 105.000 Ft
+> Arc + nyak | 30.000 Ft/alkalom
+- bérletkedvezmény:
+3 alkalom 80.000 Ft
+5 alkalom 125.000 Ft
+> Arc + nyak + dekoltázs | 35.000 Ft/alkalom
+- bérletkedvezmény:
+3 alkalom 95.000 Ft
+5 alkalom 150.000 Ft
+
+[LISTA: GYANTÁZÁS]
+Bajusz | 1.500 Ft
+Arc/áll | 2.000 Ft
+Hónalj | 2.000Ft
+Mellkas/has | 4.000 Ft
+Hát/váll | 4.000 Ft
+Alkar | 2.000 Ft
+Teljes kar | 3.000 Ft
+Lábszár | 3.000 Ft
+Teljes láb | 5.000 Ft
+Bikini vonal | 2.000 Ft
+Fazon | 4.000 Ft
+Hollywood (teljes intim) | 7.000 Ft
+
+[SZÖVEG: TOVÁBBI SZOLGÁLTATÁSOK]
+A kozmetikai kezelések mellett az alábbi szépségápolási szolgáltatások is elérhetők az SZDA Beauty & Skin szalonban:
+
+Manikűr · Műköröm · Pedikűr · Szempilla- és szemöldök styling
+Az aktuális árakról és szabad időpontokról érdeklődj üzenetben!
