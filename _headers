@@ -25,3 +25,6 @@
 # Safety net: the price file is not published (see .assetsignore), but if it ever is, keep it out of search results.
 /arak.txt
   X-Robots-Tag: noindex
+
+/adatok.txt
+  X-Robots-Tag: noindex

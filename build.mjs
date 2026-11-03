@@ -1,10 +1,16 @@
-// Rebuilds the "Árlista" section of the pages from arak.txt.
+// Rebuilds parts of the pages from two plain text files that can be edited on GitHub:
 //
-//   node build.mjs           rewrite the price list in every .html file that has the markers
+//   arak.txt    -> the "Árlista" section             <!-- ARAK:START --> ... <!-- ARAK:END -->
+//   adatok.txt  -> company details (tax number, seat, registration number, e-mail, phone, salon address):
+//                  the data block of the privacy notice   <!-- ADAT:ADATKEZELO:START --> ... END
+//                  the contact details                    <!-- ADAT:KAPCSOLAT:START --> ... END
+//                  the structured data for search engines <!-- ADAT:JSONLD:START --> ... END
+//
+//   node build.mjs           rewrite those parts in every .html file that has the markers
 //   node build.mjs --check   change nothing, exit 1 if a page is out of date
 //
-// Cloudflare runs this as the "Build command", so editing arak.txt on GitHub updates the site.
-// If arak.txt has a mistake the script stops with a Hungarian message and a non-zero exit code:
+// Cloudflare runs this as the "Build command", so editing a text file on GitHub updates the site.
+// If a text file has a mistake the script stops with a Hungarian message and a non-zero exit code:
 // the build fails and the previous version of the site stays online.
 
 import { readFileSync, writeFileSync, readdirSync } from 'node:fs';
@@ -12,14 +18,20 @@ import { fileURLToPath } from 'node:url';
 import { dirname, join } from 'node:path';
 
 const dir = dirname(fileURLToPath(import.meta.url));
-const START = '<!-- ARAK:START -->';
-const END = '<!-- ARAK:END -->';
 const checkOnly = process.argv.includes('--check');
 
-class ArakError extends Error {}
-const fail = (line, msg) => { throw new ArakError(line ? `arak.txt, ${line}. sor: ${msg}` : `arak.txt: ${msg}`); };
+class TxtError extends Error {}
+let FILE = 'arak.txt';
+const fail = (line, msg) => {
+  const e = new TxtError(line ? `${FILE}, ${line}. sor: ${msg}` : `${FILE}: ${msg}`);
+  e.file = FILE;
+  throw e;
+};
+const failPage = msg => { throw new TxtError(msg); };
 
 const esc = s => s.replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;');
+
+// ---------------------------------------------------------------- arak.txt (price list)
 
 function splitPipe(s, n) {
   const i = s.indexOf('|');
@@ -30,7 +42,7 @@ function splitPipe(s, n) {
 function parse(text) {
   const blocks = [];
   let block = null, item = null, tier = null;
-  text.replace(/^﻿/, '').split(/\r?\n/).forEach((raw, i) => {
+  text.replace(/^\uFEFF/, '').split(/\r?\n/).forEach((raw, i) => {
     const n = i + 1, line = raw.trim();
     if (line.startsWith('#')) return;
     if (!line) { item = tier = null; if (block && block.kind === 'text') block.cur = null; return; }
@@ -124,30 +136,135 @@ function render(blocks) {
   return out.join('\n');
 }
 
+// ---------------------------------------------------------------- adatok.txt (company details)
+
+const SITE = 'https://szdabeauty.hu';
+const FIELDS = {
+  adatkezelo: 'Adatkezelő', szekhely: 'Székhely', adoszam: 'Adószám', nyilvantartasiszam: 'Nyilvántartási szám',
+  email: 'E-mail', telefon: 'Telefon', szaloncime: 'Szalon címe',
+};
+const ALIAS = { telefonszam: 'telefon', cim: 'szaloncime' };
+const REQUIRED = ['adatkezelo', 'szekhely', 'email', 'telefon', 'szaloncime'];
+const norm = s => s.normalize('NFD').replace(/[\u0300-\u036f]/g, '').toLowerCase().replace(/[^a-z]/g, '');
+
+function parseData(text) {
+  const d = {};
+  text.replace(/^\uFEFF/, '').split(/\r?\n/).forEach((raw, i) => {
+    const n = i + 1, line = raw.trim();
+    if (!line || line.startsWith('#')) return;
+    const m = line.match(/^([^:]+):(.*)$/);
+    if (!m) fail(n, 'Ez a sor így épül fel: Név: érték (kettősponttal).');
+    let key = norm(m[1]); key = ALIAS[key] || key;
+    if (!FIELDS[key]) fail(n, `Ismeretlen név: "${m[1].trim()}". Ezek lehetnek: ${Object.values(FIELDS).join(', ')}.`);
+    if (key in d) fail(n, `A(z) "${FIELDS[key]}" kétszer szerepel.`);
+    d[key] = m[2].trim();
+  });
+  for (const k of REQUIRED) if (!d[k]) fail(0, `A(z) "${FIELDS[k]}" sor hiányzik vagy üres, ezt nem lehet üresen hagyni.`);
+  if (!/^[^\s@<>"]+@[^\s@<>"]+\.[^\s@<>"]+$/.test(d.email)) fail(0, `Az e-mail-cím nem tűnik érvényesnek: ${d.email}`);
+  const digits = d.telefon.replace(/\D/g, '');
+  if (digits.length < 8 || digits.length > 15) fail(0, `A telefonszám nem tűnik érvényesnek: ${d.telefon}`);
+  return d;
+}
+
+const todo = '<mark class="todo">[még nincs megadva]</mark>';
+const telHref = t => 'tel:' + (t.trim().startsWith('+') ? '+' : '') + t.replace(/\D/g, '');
+const mapHref = a => 'https://www.google.com/maps/search/?api=1&query=' + encodeURIComponent(a).replace(/%20/g, '+');
+const mailLink = e => `<a href="mailto:${esc(e)}">${esc(e)}</a>`;
+const telLink = t => `<a href="${esc(telHref(t))}">${esc(t)}</a>`;
+
+function renderController(d) {
+  return ['<dl>',
+    '  <dt>Adatkezelő</dt>', `  <dd>${esc(d.adatkezelo)}</dd>`,
+    '  <dt>Székhely</dt>', `  <dd>${esc(d.szekhely)}</dd>`,
+    '  <dt>E-mail</dt>', `  <dd>${mailLink(d.email)}</dd>`,
+    '  <dt>Telefonszám</dt>', `  <dd>${telLink(d.telefon)}</dd>`,
+    '  <dt>Adószám</dt>', `  <dd>${d.adoszam ? esc(d.adoszam) : todo}</dd>`,
+    '  <dt>Nyilvántartási szám</dt>', `  <dd>${d.nyilvantartasiszam ? esc(d.nyilvantartasiszam) : todo}</dd>`,
+    '</dl>'].join('\n');
+}
+
+function renderContact(d) {
+  return ['<dl>',
+    '  <dt>E-mail</dt>', `  <dd>${mailLink(d.email)}</dd>`,
+    '  <dt>Telefonszám</dt>', `  <dd>${telLink(d.telefon)}</dd>`,
+    '  <dt>Cím</dt>',
+    `  <dd>${esc(d.szaloncime)}<br><a class="maplink" href="${esc(mapHref(d.szaloncime))}" rel="noopener">Megnyitás a Térképen</a></dd>`,
+    '</dl>'].join('\n');
+}
+
+function renderJsonLd(d) {
+  const m = d.szaloncime.match(/^(\d{4})\s+([^,]+),\s*(.+)$/);
+  const address = m
+    ? { '@type': 'PostalAddress', streetAddress: m[3].trim(), postalCode: m[1], addressLocality: m[2].trim(), addressCountry: 'HU' }
+    : { '@type': 'PostalAddress', streetAddress: d.szaloncime, addressCountry: 'HU' };
+  const data = {
+    '@context': 'https://schema.org', '@type': 'BeautySalon', '@id': SITE + '/#salon',
+    name: 'SZDA Beauty & Skin', url: SITE + '/', image: SITE + '/img/og.jpg', logo: SITE + '/img/logo.webp',
+    description: 'Szépségszalon Tatabányán: arckezelések, gyantázás, szemöldök- és szempilla styling, manikűr, pedikűr, smink.',
+    telephone: telHref(d.telefon).slice(4), email: d.email, address,
+    founder: { '@type': 'Person', name: 'Szabóné Deli Anna' },
+    sameAs: ['https://www.facebook.com/share/1HsgUf9JpY/', 'https://www.instagram.com/szdabeauty888/'],
+  };
+  return '<script type="application/ld+json">' + JSON.stringify(data).replace(/</g, '\\u003c') + '</script>';
+}
+
+// ---------------------------------------------------------------- putting the parts into the pages
+
+const marker = (name, edge) => `<!-- ${name}:${edge} -->`;
+const wrap = (html, ind) => '\n' + ind + html.split('\n').join('\n' + ind) + '\n' + ind;
+
+function applyBlock(text, file, name, inner) {
+  const S = marker(name, 'START'), E = marker(name, 'END');
+  const a = text.indexOf(S), b = text.indexOf(E);
+  if (a < 0 && b < 0) return null;                          // this page does not have that block
+  if (a < 0 || b < a) failPage(`A(z) ${file} fájlban hiányzik vagy rossz helyen van a ${a < 0 ? S : E} jelölés.`);
+  return text.slice(0, a + S.length) + inner + text.slice(b);
+}
+
 function main() {
+  FILE = 'arak.txt';
   const blocks = parse(readFileSync(join(dir, 'arak.txt'), 'utf8'));
-  const html = '\n' + render(blocks) + '\n  ';
-  const count = blocks.reduce((s, b) => s + (b.items ? b.items.length : 0), 0);
-  let touched = 0, stale = 0;
+  FILE = 'adatok.txt';
+  const data = parseData(readFileSync(join(dir, 'adatok.txt'), 'utf8'));
+
+  const parts = [
+    { name: 'ARAK', inner: '\n' + render(blocks) + '\n  ' },
+    { name: 'ADAT:ADATKEZELO', inner: wrap(renderController(data), '  ') },
+    { name: 'ADAT:KAPCSOLAT', inner: wrap(renderContact(data), '    ') },
+    { name: 'ADAT:JSONLD', inner: wrap(renderJsonLd(data), '') },
+  ];
+
+  const used = new Set(), pages = new Set();
+  let stale = 0;
   for (const f of readdirSync(dir).filter(x => x.endsWith('.html'))) {
     const old = readFileSync(join(dir, f), 'utf8');
-    const a = old.indexOf(START), b = old.indexOf(END);
-    if (a < 0 && b < 0) continue;
-    if (a < 0 || b < a) fail(0, `A(z) ${f} fájlban hiányzik vagy rossz helyen van a ${a < 0 ? START : END} jelölés.`);
-    const next = old.slice(0, a + START.length) + html + old.slice(b);
-    touched++;
+    let next = old;
+    for (const p of parts) {
+      const r = applyBlock(next, f, p.name, p.inner);
+      if (r !== null) { next = r; used.add(p.name); pages.add(f); }
+    }
     if (next !== old) {
       stale++;
       if (!checkOnly) writeFileSync(join(dir, f), next);
       console.log(`${checkOnly ? 'Elavult' : 'Frissítve'}: ${f}`);
     }
   }
-  if (!touched) fail(0, `Egyik .html fájlban sincs ${START} ... ${END} jelölés, nincs hova beírni az árlistát.`);
-  console.log(`Árlista rendben: ${count} kezelés, ${blocks.length} rész, ${touched} oldal${stale ? '' : ' (nem változott semmi)'}.`);
+  if (!used.has('ARAK')) failPage(`Egyik .html fájlban sincs ${marker('ARAK', 'START')} ... ${marker('ARAK', 'END')} jelölés, nincs hova beírni az árlistát.`);
+  for (const p of parts) if (!used.has(p.name)) console.warn(`FIGYELEM: a(z) ${marker(p.name, 'START')} jelölés egyik oldalban sincs meg.`);
+
+  const count = blocks.reduce((s, b) => s + (b.items ? b.items.length : 0), 0);
+  console.log(`Árlista rendben: ${count} kezelés, ${blocks.length} rész.`);
+  console.log(`Céges adatok rendben (adatok.txt).`);
+  console.log(`${pages.size} oldal ellenőrizve${stale ? '' : ', nem változott semmi'}.`);
+  const missing = ['adoszam', 'nyilvantartasiszam'].filter(k => !data[k]).map(k => FIELDS[k]);
+  if (missing.length) console.warn(`FIGYELEM: még nincs megadva az adatok.txt fájlban: ${missing.join(', ')}. Az oldalon sárga felirat jelzi, éles használat előtt ki kell tölteni.`);
   if (checkOnly && stale) process.exit(1);
 }
 
 try { main(); } catch (e) {
-  if (e instanceof ArakError) { console.error('\nHIBA az árlistában!\n' + e.message + '\n\nAz oldal nem frissült, a régi árlista marad látható.\n'); process.exit(1); }
+  if (e instanceof TxtError) {
+    console.error(`\nHIBA${e.file ? ` a(z) ${e.file} fájlban` : ''}!\n${e.message}\n\nAz oldal nem frissült, a régi változat marad látható.\n`);
+    process.exit(1);
+  }
   throw e;
 }

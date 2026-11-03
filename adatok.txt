@@ -1,0 +1,33 @@
+# ======================================================================
+#  SZDA Beauty & Skin – CÉGES ADATOK
+#
+#  Ebből a fájlból kerül az oldalra az adószám, a székhely, a
+#  nyilvántartási szám, az e-mail-cím, a telefonszám és a szalon címe.
+#  Ha itt átírsz valamit, és elmented (Commit changes), 1-2 percen belül
+#  megváltozik a weboldalon is: az adatkezelési tájékoztatóban és a
+#  Kapcsolat résznél is.
+#
+#  Minden sor így épül fel:   Név: érték
+#  A nevet ne változtasd meg, csak a kettőspont utáni részt írd át.
+#  A # jellel kezdődő sorok magyarázatok, ezek nem jelennek meg.
+#
+#  Az Adószám és a Nyilvántartási szám sort üresen is hagyhatod, ilyenkor
+#  az oldalon sárga "még nincs megadva" felirat látszik. Az oldal éles
+#  indítása előtt ezeket ki kell tölteni.
+#
+#  FEBRUÁR VÉGÉN: ha áttérsz a saját vállalkozásodra, itt kell átírni az
+#  Adatkezelő nevét, az Adószámot és a Nyilvántartási számot. Addig,
+#  amíg a kft. működteti a szalont, a kft. adatai kerülhetnek ide (a
+#  kft. neve, adószáma, cégjegyzékszáma). Ezt egyeztesd a könyvelőddel.
+#
+#  FONTOS: ha elrontasz valamit (például hibás az e-mail-cím), az oldal
+#  nem frissül, és a régi adatok maradnak látható. Ilyenkor szólj Vincének.
+# ======================================================================
+
+Adatkezelő: Szabóné Deli Anna (SZDA Beauty & Skin)
+Székhely: 2800 Tatabánya, Erkel Ferenc utca 4.
+Adószám:
+Nyilvántartási szám:
+E-mail: szdabeauty@gmail.com
+Telefon: +36-30-355-24-99
+Szalon címe: 2800 Tatabánya, Erkel Ferenc utca 4.
