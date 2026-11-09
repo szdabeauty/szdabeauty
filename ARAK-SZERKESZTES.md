@@ -5,7 +5,7 @@ Az oldalon két rész szöveges fájlból készül. Ha ezekben átírsz valamit,
 | Fájl | Mit lehet benne átírni |
 |---|---|
 | `arak.txt` | az **Árlista**: árak, kezelések, leírások |
-| `adatok.txt` | **adószám, székhely, nyilvántartási szám**, e-mail-cím, telefonszám, a szalon címe (az adatkezelési tájékoztatóban és a Kapcsolat résznél jelennek meg) |
+| `adatok.txt` | **adószám, székhely, cégjegyzékszám / nyilvántartási szám**, e-mail-cím, telefonszám, a szalon címe (az adatkezelési tájékoztatóban és a Kapcsolat résznél jelennek meg) |
 
 ## Lépések
 
@@ -28,7 +28,7 @@ Az oldalon két rész szöveges fájlból készül. Ha ezekben átírsz valamit,
 
 **Adószám beírása:** az `adatok.txt`-ben az `Adószám:` sor végére írd be a számot, például `Adószám: 12345678-1-23`
 
-**Február végén, a KATA-ra váltáskor:** az `adatok.txt`-ben írd át az `Adatkezelő`, az `Adószám` és a `Nyilvántartási szám` sort a saját adataidra.
+**Február végén, a KATA-ra váltáskor:** az `adatok.txt`-ben írd át az `Adatkezelő`, az `Adószám` és a `Cégjegyzékszám / nyilvántartási szám` sort a saját adataidra.
 
 Mindkét fájl tetején, a `#` jellel kezdődő sorokban ott van az összes szabály.
 

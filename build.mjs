@@ -140,10 +140,10 @@ function render(blocks) {
 
 const SITE = 'https://szdabeauty.hu';
 const FIELDS = {
-  adatkezelo: 'Adatkezelő', szekhely: 'Székhely', adoszam: 'Adószám', nyilvantartasiszam: 'Nyilvántartási szám',
+  adatkezelo: 'Adatkezelő', szekhely: 'Székhely', adoszam: 'Adószám', nyilvantartasiszam: 'Cégjegyzékszám / nyilvántartási szám',
   email: 'E-mail', telefon: 'Telefon', szaloncime: 'Szalon címe',
 };
-const ALIAS = { telefonszam: 'telefon', cim: 'szaloncime' };
+const ALIAS = { telefonszam: 'telefon', cim: 'szaloncime', cegjegyzekszam: 'nyilvantartasiszam', cegjegyzekszamnyilvantartasiszam: 'nyilvantartasiszam' };
 const REQUIRED = ['adatkezelo', 'szekhely', 'email', 'telefon', 'szaloncime'];
 const norm = s => s.normalize('NFD').replace(/[\u0300-\u036f]/g, '').toLowerCase().replace(/[^a-z]/g, '');
 
@@ -179,7 +179,7 @@ function renderController(d) {
     '  <dt>E-mail</dt>', `  <dd>${mailLink(d.email)}</dd>`,
     '  <dt>Telefonszám</dt>', `  <dd>${telLink(d.telefon)}</dd>`,
     '  <dt>Adószám</dt>', `  <dd>${d.adoszam ? esc(d.adoszam) : todo}</dd>`,
-    '  <dt>Nyilvántartási szám</dt>', `  <dd>${d.nyilvantartasiszam ? esc(d.nyilvantartasiszam) : todo}</dd>`,
+    '  <dt>Cégjegyzékszám / nyilvántartási szám</dt>', `  <dd>${d.nyilvantartasiszam ? esc(d.nyilvantartasiszam) : todo}</dd>`,
     '</dl>'].join('\n');
 }
 
